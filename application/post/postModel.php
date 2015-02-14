@@ -67,7 +67,6 @@
             
             $comm = new Comment($db->lnk);
             return $comm->updateReport($comm_id);
-            
         }
 	}
 

@@ -24,8 +24,10 @@ class Comment {
             case 1:
                 self::__construct1($argv[0]);
                 break;
+            case 8:
+                self::__construct2( $argv[0], $argv[1], $argv[2], $argv[3], $argv[4], $argv[5], $argv[6], $argv[7]);
             case 9:
-                self::__construct2( $argv[0], $argv[1], $argv[2], $argv[3], $argv[4], $argv[5], $argv[6], $argv[7], $argv[8] );
+                self::__construct3( $argv[0], $argv[1], $argv[2], $argv[3], $argv[4], $argv[5], $argv[6], $argv[7], $argv[8] );
          }
    }
     
@@ -33,8 +35,20 @@ class Comment {
 		$this->db = $dbase;
    }
     
+   public function __construct2( $comment_id, $subject, $parrent_comment_id, 
+                                  $comm_text, $comm_author_name, $like, $dlike, $dtime) 
+   {
+         $this->comment_id = $comment_id;
+         $this->subject = $subject;
+         $this->parrent_comment_id = $parrent_comment_id;
+         $this->comm_text = $comm_text;
+         $this->comm_author_name = $comm_author_name;
+         $this->like = $like;
+         $this->dlike = $dlike;
+         $this->dtime = $dtime;
+   }
     
-  public function __construct2( $comment_id, $subject, $parrent_comment_id, 
+  public function __construct3( $comment_id, $subject, $parrent_comment_id, 
                                   $comm_text, $comm_author_name, $like, $dlike, $dtime, $depth) 
    {
          $this->comment_id = $comment_id;
@@ -46,6 +60,55 @@ class Comment {
          $this->dlike = $dlike;
          $this->dtime = $dtime;
          $this->depth = $depth;
+   }
+    
+    
+   public function getNewComments()
+   {
+        $results = array();
+        try{
+            $data = $this->db->query('SELECT `comment_id`, `subject`, `parent_comment_id`, `comm_text`, `comm_author_name`,  `com_like`, `dislike`, `dtime` FROM `comments` WHERE`is_view` = 0 ORDER BY `dtime` DESC');
+            $data->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "Comment" );
+            while($row = $data->fetch()) {
+                $results[] = $row;
+            }
+            return $results;
+        }catch (PDOException $e){
+            return false;
+        }
+        return false;
+   }
+    
+   public function reviewComment($comment_id,$is_allow)
+   {
+         try{
+            
+            $cod = "SELECT * FROM `comments` WHERE `comment_id` = {$comment_id} LIMIT 1";
+            $oneRow = $this->db->prepare( $cod );
+            $oneRow->execute();
+            $rr = $oneRow->fetch();
+            
+            if(!empty($rr))
+            {
+                $sql = "";
+                
+                if($is_allow == true)
+                {
+                    $sql = "UPDATE `comments` SET `is_view`= 1 WHERE `comment_id` = {$comment_id} LIMIT 1";
+                } else {
+                    $sql = "UPDATE `comments` SET `is_view`= 2 WHERE `comment_id` = {$comment_id} LIMIT 1";
+                }
+                
+                $up = $this->db->prepare($sql);
+                $up->execute();
+                $count = $up->rowCount();
+                
+                if($count == 1) return true;
+            } 
+           return false;
+        }catch (PDOException $e){
+            return false;
+        }
    }
     
    public function createComment($name, $text, $post_id, $parrent_id = false)

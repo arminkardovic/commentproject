@@ -6,18 +6,18 @@
   margin-bottom: 0px;
 }
 .comment-list .panel .panel-heading {
-  padding: 4px 15px;
   position: absolute;
+  top: 1px;
+  padding: 4px 15px;
   border:none;
   /*Panel-heading border radius*/
   border-top-right-radius:0px;
-  top: 1px;
 }
 .comment-list .panel .panel-heading.right {
+  right: 16px;
   border-right-width: 0px;
   /*Panel-heading border radius*/
   border-top-left-radius:0px;
-  right: 16px;
 }
 .comment-list .panel .panel-heading .panel-body {
   padding-top: 6px;
@@ -29,12 +29,12 @@
 /* Portrait tablets and medium desktops */
 @media (min-width: 768px) {
   .comment-list .arrow:after, .comment-list .arrow:before {
-    content: "";
     position: absolute;
     width: 0;
     height: 0;
     border-style: solid;
     border-color: transparent;
+    content: "";
   }
   .comment-list .panel.arrow.left:after, .comment-list .panel.arrow.left:before {
     border-left: 0;
@@ -42,36 +42,36 @@
   /*****Left Arrow*****/
   /*Outline effect style*/
   .comment-list .panel.arrow.left:before {
-    left: 0px;
     top: 30px;
+    left: 0px;
+    border-width: 16px;
     /*Use boarder color of panel*/
     border-right-color: inherit;
-    border-width: 16px;
   }
   /*Background color effect*/
   .comment-list .panel.arrow.left:after {
-    left: 1px;
     top: 31px;
+    left: 1px;
+    border-width: 15px;
     /*Change for different outline color*/
     border-right-color: #FFFFFF;
-    border-width: 15px;
   }
   /*****Right Arrow*****/
   /*Outline effect style*/
   .comment-list .panel.arrow.right:before {
-    right: -16px;
     top: 30px;
+    right: -16px;
+    border-width: 16px;
     /*Use boarder color of panel*/
     border-left-color: inherit;
-    border-width: 16px;
   }
   /*Background color effect*/
   .comment-list .panel.arrow.right:after {
-    right: -14px;
     top: 31px;
+    right: -14px;
+    border-width: 15px;
     /*Change for different outline color*/
     border-left-color: #FFFFFF;
-    border-width: 15px;
   }
 }
 .comment-list .comment-post {
