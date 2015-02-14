@@ -24,8 +24,12 @@ class Comment {
             case 1:
                 self::__construct1($argv[0]);
                 break;
+            case 7:
+                self::__construc4( $argv[0], $argv[1], $argv[2], $argv[3], $argv[4], $argv[5], $argv[6]);
+                break;
             case 8:
                 self::__construct2( $argv[0], $argv[1], $argv[2], $argv[3], $argv[4], $argv[5], $argv[6], $argv[7]);
+                break;
             case 9:
                 self::__construct3( $argv[0], $argv[1], $argv[2], $argv[3], $argv[4], $argv[5], $argv[6], $argv[7], $argv[8] );
          }
@@ -48,6 +52,19 @@ class Comment {
          $this->dtime = $dtime;
    }
     
+    public function __construct4( $comment_id, $del_num, $comm_text, 
+                                $comm_author_name, $like, $dlike, $dtime) 
+   {
+         $this->comment_id = $comment_id;
+         $this->dtime = $del_num; 
+         $this->comm_text = $comm_text;
+         $this->comm_author_name = $comm_author_name;
+         $this->like = $like;
+         $this->dlike = $dlike;
+         $this->dtime = $dtime;
+          
+   }
+    
   public function __construct3( $comment_id, $subject, $parrent_comment_id, 
                                   $comm_text, $comm_author_name, $like, $dlike, $dtime, $depth) 
    {
@@ -61,13 +78,29 @@ class Comment {
          $this->dtime = $dtime;
          $this->depth = $depth;
    }
-    
-    
+        
    public function getNewComments()
    {
         $results = array();
         try{
             $data = $this->db->query('SELECT `comment_id`, `subject`, `parent_comment_id`, `comm_text`, `comm_author_name`,  `com_like`, `dislike`, `dtime` FROM `comments` WHERE`is_view` = 0 ORDER BY `dtime` DESC');
+            $data->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "Comment" );
+            while($row = $data->fetch()) {
+                $results[] = $row;
+            }
+            return $results;
+        }catch (PDOException $e){
+            return false;
+        }
+        return false;
+   }
+    
+    
+   public function getReportedComment()
+   {
+        $results = array();
+        try{
+            $data = $this->db->query('SELECT `comment_id`, `del_num`, `comm_text`, `comm_author_name`,  `com_like`, `dislike`, `dtime` FROM `comments` WHERE`is_view` < 2 AND `del_num` > 2 ORDER BY `del_num` DESC');
             $data->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "Comment" );
             while($row = $data->fetch()) {
                 $results[] = $row;

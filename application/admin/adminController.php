@@ -55,21 +55,33 @@ class adminController extends baseController{
     
         public function report($args = false)
         {
-            $registry = Registry::getInstance();	
-			  $model = $this->load->model('admin');
-               
-
-
+                $registry = Registry::getInstance();	
+			    $model = $this->load->model('admin');
+    
 				$input =  $registry->head; 
 				$file = $registry->files;
 				
 				$files =  array(
 				         $input->appendStylesheet($file['css']['core']),
 						 $input->appendJS($file['js']['jquery'])
-				  );
-				
+				);
+            
+				if(isset($args["deny_comm"]))
+                {
+                      $var = $model->allowComment($args["deny_comm"]);
+                      if($var)
+                      {
+                          $vars['message']['type'] = "success";
+                          $vars['message']['text'] = "Uspjesno ste izvrsili akciju, kometar je vidljiv";
+                      } else {
+                          $vars['message']['type'] = "danger";
+                          $vars['message']['text'] = "Doslo je do greske i komentar ne moze biti prikazan";
+                      }
+                }
+            
 				$vars['title'] = 'Home';
 				$vars['files'] = $files;
+                $vars['comments'] = $model->revisionComments();
              
 				$this->load->viewSimple('admin','reportAdmin',$vars);	
         
