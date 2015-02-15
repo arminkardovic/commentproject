@@ -37,6 +37,7 @@
 			"jquery" => "http://code.jquery.com/jquery-1.9.1.js",
             "bootstrap_js" => '/'.SUB_FOLDER . "lib/js/bootstrap.js",
 			"comments" => '/'.SUB_FOLDER ."lib/js/comments.js",
+            "mustache" => '/'.SUB_FOLDER ."lib/js/mustache.js",
 			"script" => '/'.SUB_FOLDER ."lib/js/script.js",
 			"user" => '/'.SUB_FOLDER ."lib/js/user.js"
 		)

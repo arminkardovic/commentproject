@@ -93,6 +93,7 @@ class postController extends baseController{
                              $input->appendStylesheet($file['css']['core']),
                              $input->appendJS($file['js']['jquery']),
                              $input->appendJS($file['js']['bootstrap_js']),
+                             $input->appendJS($file['js']['mustache']),
                              $input->appendJS($file['js']['comments'])
                 );
                 $vars['title'] = 'Dodaj komentar';
@@ -151,6 +152,70 @@ class postController extends baseController{
         {
             $num = array('nula', 'jedan', 'dva', 'tri', 'cetiri', 'pet', 'sest');
         
+        } 
+    
+        public function ajaxGetComments($args=false)
+        {
+            $registry = Registry::getInstance();	
+            $model = $this->load->model('post');
+            $args = $registry->args;
+            
+            $comm = $model->getComments($args[0]);
+        
+            
+            $arr = isset($_COOKIE['comments']) ? $_COOKIE['comments'] : "";
+            $arr = json_decode($arr);
+            
+            $arr = isset($arr[0]) ? $arr : array();
+        
+            $rep = isset($_COOKIE['report_comm']) ? $_COOKIE['report_comm'] : "";
+            $rep = json_decode($rep);
+            $rep = isset($rep[0]) ? $rep : array();
+            
+            $com = array();
+            $num = 0;
+            
+            foreach($comm as $c => $k) {
+                $newComm = array();
+                $newComm["comment_id"] = $k->comment_id;
+                $newComm["subject"] = $k->subject;
+                $newComm["parrent_comment_id"] = $k->parrent_comment_id;
+                $newComm["comm_text"] = $k->comm_text;
+                $newComm["comm_author_name"]= $k->comm_author_name;
+                $newComm["like"] = $k->like;
+                $newComm["dlike"] = $k->dlike;
+                $newComm["dtime"] = $k->dtime;
+                $newComm["depth"] = $k->depth;
+                
+                $newComm["depth_sty"] = "";
+                
+                $x = isset($k->depth) ? $k->depth : 0;
+                if($x > 0)
+                {
+                    $y = $x-1;
+                    $newComm["depth_sty"] = " col-md-offset-{$x} col-sm-offset-{$y} ";
+                }
+                
+                $tmp = (10-$x); 
+                $newComm["depth_sty_in"] = " col-md-{$tmp} col-sm-{$tmp} ";
+                
+                $newComm["dis_rep"] = "";
+                
+                if (in_array($k->comment_id, $rep)){
+                    $newComm["dis_rep"] = "disabled";
+                }
+                
+                $newComm["dis_like"] = "";
+                
+                if (in_array($k->comment_id, $arr)){
+                    $newComm["dis_like"] = "disabled";
+                }
+                
+                $com[$num] = $newComm;
+                $num++;
+                 
+            }
+            echo json_encode($com);
         } 
 }
 
