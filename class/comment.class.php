@@ -337,12 +337,36 @@ class Comment {
         }
     }
     
+    public function getOrderedComments($post_id, $col_order, $asc_desc)
+    {
+        try{
+            
+            
+            $ascdesc = ($asc_desc == true) ? 'ASC' : 'DESC';
+            $allComments = "SELECT `comment_id`, `subject`, `parent_comment_id`,
+                                    `comm_text`, `comm_author_name`,`com_like`, 
+                                    `dislike`, `dtime` 
+                            FROM `comments` 
+                            WHERE `post_id` = :id AND `is_view` = 1 
+                            ORDER BY {$col_order} {$ascdesc}";
+            
+            $all = $this->db->prepare( $allComments );
+            $all->execute(array("id"=>$post_id));
+
+            $res = $all->fetchAll(PDO::FETCH_ASSOC);
+            
+            $commout = array();
+            foreach ($res as $n)
+            {       
+                    $commout[] = $n;
+            }  
+            return $commout;
+        }catch (PDOException $e){
+            return false;
+        }
+    }
+    
 }
 
-function chk($var)
-{
-    echo "<pre>";
-    var_dump($var);
-    echo "</pre>";
-}
+
 ?>

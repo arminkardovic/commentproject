@@ -217,6 +217,66 @@ class postController extends baseController{
             }
             echo json_encode($com);
         } 
+    
+        public function ajaxGetHronoComments($args = false)
+        {
+            $registry = Registry::getInstance();	
+            $model = $this->load->model('post');
+            $args = $registry->args;
+            
+            $ar = isset($args[1]) ? $args[1] : TRUE;
+            $ar = ($ar == "true") ? TRUE : FALSE;
+            $comm = $model->getHronoComments($args[0], $ar);
+        
+            
+            $arr = isset($_COOKIE['comments']) ? $_COOKIE['comments'] : "";
+            $arr = json_decode($arr);
+            
+            $arr = isset($arr[0]) ? $arr : array();
+        
+            $rep = isset($_COOKIE['report_comm']) ? $_COOKIE['report_comm'] : "";
+            $rep = json_decode($rep);
+            $rep = isset($rep[0]) ? $rep : array();
+            
+            $com = array();
+            $num = 0;
+            
+            foreach($comm as $k) {
+                $newComm = array();
+                $newComm = $k;
+                $newComm["depth_sty"] = "";
+                
+                $newComm["like"] = $k['com_like'];
+                $newComm["dlike"] = $k['dislike'];
+                
+                $x = isset($k['depth']) ? $k['depth'] : 0;
+                if($x > 0)
+                {
+                    $y = $x-1;
+                    $newComm["depth_sty"] = " col-md-offset-{$x} col-sm-offset-{$y} ";
+                }
+                
+                $tmp = (10-$x); 
+                $newComm["depth_sty_in"] = " col-md-{$tmp} col-sm-{$tmp} ";
+                
+                $newComm["dis_rep"] = "";
+                
+                if (in_array($k['comment_id'], $rep)){
+                    $newComm["dis_rep"] = "disabled";
+                }
+                
+                $newComm["dis_like"] = "";
+                
+                if (in_array($k['comment_id'], $arr)){
+                    $newComm["dis_like"] = "disabled";
+                }
+                
+                $com[$num] = $newComm;
+                $num++;
+                 
+            }
+            echo json_encode($com);
+        }
 }
 
 

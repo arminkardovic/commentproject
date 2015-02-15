@@ -92,7 +92,7 @@
             <h4 class="page-header">Komentara: <?php echo $numComments;?></h4>
        
             <button class="load_comments btn btn-primary">Standardno</button>
-            <button class="load_comments btn btn-primary">Hronoloski</button>
+            <button id="hrono" class="btn btn-primary">Hronoloski</button>
             <button class="load_comments btn btn-success">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true" style="line-height: inherit;"></span>
             </button>

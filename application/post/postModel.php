@@ -68,6 +68,18 @@
             $comm = new Comment($db->lnk);
             return $comm->updateReport($comm_id);
         }
+        
+        public function getHronoComments($post_id, $asc = false)
+        {
+            $registry = Registry::getInstance();
+		    $config = $registry->config;
+            $db = new Database($config['db']['db1']);
+            $db-> db_connect();
+            
+            $comm = new Comment($db->lnk);
+            return $comm->getOrderedComments($post_id, 'dtime', $asc);
+
+        }
 	}
 
 
