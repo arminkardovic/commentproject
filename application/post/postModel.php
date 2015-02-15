@@ -78,7 +78,28 @@
             
             $comm = new Comment($db->lnk);
             return $comm->getOrderedComments($post_id, 'dtime', $asc);
-
+        }
+        
+        public function getLikeComments($post_id, $asc = false)
+        {
+            $registry = Registry::getInstance();
+		    $config = $registry->config;
+            $db = new Database($config['db']['db1']);
+            $db-> db_connect();
+            
+            $comm = new Comment($db->lnk);
+            return $comm->getOrderedComments($post_id, 'com_like', $asc);
+        }
+        
+        public function getDisLikeComments($post_id, $asc = false)
+        {
+            $registry = Registry::getInstance();
+		    $config = $registry->config;
+            $db = new Database($config['db']['db1']);
+            $db-> db_connect();
+            
+            $comm = new Comment($db->lnk);
+            return $comm->getOrderedComments($post_id, 'dislike', $asc);
         }
 	}
 

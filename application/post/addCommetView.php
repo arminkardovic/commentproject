@@ -93,10 +93,10 @@
        
             <button class="load_comments btn btn-primary">Standardno</button>
             <button id="hrono" class="btn btn-primary">Hronoloski</button>
-            <button class="load_comments btn btn-success">
+            <button id="like_but_com" class="btn btn-success">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true" style="line-height: inherit;"></span>
             </button>
-            <button class="load_comments btn btn-danger">
+            <button id="dislike_but_com" class="btn btn-danger">
                 <span class="glyphicon glyphicon-minus" aria-hidden="true" style="line-height: inherit;"></span>
             </button>
             <input type="hidden" value="<?php echo $post->id; ?>" id="post_id_hidd" />
